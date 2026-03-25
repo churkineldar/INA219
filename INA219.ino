@@ -25,7 +25,7 @@ public:
 
 void ina219::Begin() {
   Serial.begin(9600);
-  Serial.println(F("Type INIT to configure."));
+  Serial.println(F("READY"));
 }
 
 void ina219::Initialize() {
