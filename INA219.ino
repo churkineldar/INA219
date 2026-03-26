@@ -25,7 +25,8 @@ public:
 
 void ina219::Begin() {
   Serial.begin(9600);
-  Serial.println(F("READY"));
+  delay(5000);
+  Serial.print(F("READY"));
 }
 
 void ina219::Initialize() {
@@ -211,6 +212,7 @@ void loop() {
       test.ReadDecimalValues();
       test.PrintAll();
     } else if (cmd == "GETADR") {
+      delay(1000);
       Serial.println(test.address);
     } else if (cmd == "GETBUS") {
       test.ReadDecimalValues();
