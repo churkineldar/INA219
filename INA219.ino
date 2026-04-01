@@ -26,7 +26,7 @@ public:
 void ina219::Begin() {
   Serial.begin(9600);
   delay(500);
-  Serial.print(F("READY"));
+  Serial.println(F("READY"));
 }
 
 void ina219::Initialize() {
@@ -212,46 +212,62 @@ void loop() {
       test.ReadDecimalValues();
       test.PrintAll();
     } else if (cmd == "GETADR") {
+      delay(10);
       Serial.println(test.address);
     } else if (cmd == "GETBUS") {
       test.ReadDecimalValues();
+      delay(10);
       Serial.println(test.bus_voltage, 6);
     } else if (cmd == "GETSHUNT") {
       test.ReadDecimalValues();
+      delay(10);
       Serial.println(test.shunt_voltage, 6);
     } else if (cmd == "GETCURR") {
       test.ReadDecimalValues();
+      delay(10);
       Serial.println(test.current, 6);
     } else if (cmd == "GETPWR") {
       test.ReadDecimalValues();
+      delay(10);
       Serial.println(test.power, 6);
     } else if (cmd == "GETRES") {
+      delay(10);
       Serial.println(test.resistance, 6);
     } else if (cmd == "GETPGA") {
+      delay(10);
       Serial.println(test.PGA);
     } else if (cmd == "GETBADC") {
+      delay(10);
       Serial.println(test.BADC);
     } else if (cmd == "GETSADC") {
+      delay(10);
       Serial.println(test.SADC);
     } else if (cmd == "GETMODE") {
+      delay(10);
       Serial.println(test.MODE);
     } else if (cmd == "GETCONFREG") {
       test.ReadBinaryRegisters();
+      delay(10);
       Serial.println(test.ConfigRegister);
     } else if (cmd == "GETSHUNTREG") {
       test.ReadBinaryRegisters();
+      delay(10);
       Serial.println(test.ShuntRegister);
     } else if (cmd == "GETBUSREG") {
       test.ReadBinaryRegisters();
+      delay(10);
       Serial.println(test.BusRegister);
     } else if (cmd == "GETPWRREG") {
       test.ReadBinaryRegisters();
+      delay(10);
       Serial.println(test.PowerRegister);
     } else if (cmd == "GETCURREG") {
       test.ReadBinaryRegisters();
+      delay(10);
       Serial.println(test.CurrentRegister);
     } else if (cmd == "GETCALREG") {
       test.ReadBinaryRegisters();
+      delay(10);
       Serial.println(test.CalibrationRegister);
     }
   }
