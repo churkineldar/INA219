@@ -25,7 +25,7 @@ public:
 
 void ina219::Begin() {
   Serial.begin(9600);
-  delay(5000);
+  delay(500);
   Serial.print(F("READY"));
 }
 
@@ -45,7 +45,7 @@ void ina219::Initialize() {
   float maxCurrent = (PGA / resistance);
   ina = new INA219(resistance, maxCurrent, address);
   if (!ina->begin()) {
-    Serial.print(F("ERROR: INA219 not found at 0x"));
+    //Serial.print(F("ERROR: INA219 not found at 0x"));
     Serial.println(address, HEX);
     delete ina;
     ina = nullptr;
@@ -212,7 +212,6 @@ void loop() {
       test.ReadDecimalValues();
       test.PrintAll();
     } else if (cmd == "GETADR") {
-      delay(1000);
       Serial.println(test.address);
     } else if (cmd == "GETBUS") {
       test.ReadDecimalValues();
@@ -256,5 +255,4 @@ void loop() {
       Serial.println(test.CalibrationRegister);
     }
   }
-  delay(100);
 }
