@@ -26,26 +26,27 @@ public:
 void ina219::Begin() {
   Serial.begin(9600);
   delay(500);
-  Serial.println(F("READY"));
+  Serial.println(F("READY"));   // отправляет READY\r\n
 }
 
 void ina219::Initialize() {
-  // 1. Адрес (шестнадцатеричный)
+  // 1. Адрес (шестнадцатеричный) — читаем до \n
   while (!Serial.available()) delay(10);
   String addrStr = Serial.readStringUntil('\n');
   addrStr.trim();
   address = (uint8_t)strtoul(addrStr.c_str(), NULL, 16);
 
-  // 2. Сопротивление шунта (float)
+  // 2. Сопротивление шунта (float) — читаем до \n
   while (!Serial.available()) delay(10);
-  resistance = Serial.parseFloat();
+  String shuntStr = Serial.readStringUntil('\n');
+  shuntStr.trim();
+  resistance = shuntStr.toFloat();
 
   // Создаём объект INA219
   if (ina) delete ina;
   float maxCurrent = (PGA / resistance);
   ina = new INA219(resistance, maxCurrent, address);
   if (!ina->begin()) {
-    //Serial.print(F("ERROR: INA219 not found at 0x"));
     Serial.println(address, HEX);
     delete ina;
     ina = nullptr;
@@ -62,7 +63,10 @@ void ina219::Initialize() {
 void ina219::SetMode() {
   if (!ina) return;
   while (!Serial.available()) delay(10);
-  MODE = (uint8_t)Serial.parseInt();
+  String modeStr = Serial.readStringUntil('\n');
+  modeStr.trim();
+  MODE = (uint8_t)modeStr.toInt();
+
   Wire.beginTransmission(address);
   Wire.write(0x00);
   Wire.endTransmission(false);
@@ -80,7 +84,10 @@ void ina219::SetMode() {
 void ina219::SetPGA() {
   if (!ina) return;
   while (!Serial.available()) delay(10);
-  PGA = Serial.parseInt();
+  String pgaStr = Serial.readStringUntil('\n');
+  pgaStr.trim();
+  PGA = pgaStr.toInt();
+
   uint8_t bits;
   if (PGA == 1) bits = 0b00;
   else if (PGA == 2) bits = 0b01;
@@ -103,7 +110,10 @@ void ina219::SetPGA() {
 void ina219::SetBADC() {
   if (!ina) return;
   while (!Serial.available()) delay(10);
-  BADC = Serial.parseInt();
+  String badcStr = Serial.readStringUntil('\n');
+  badcStr.trim();
+  BADC = badcStr.toInt();
+
   uint8_t mode;
   switch (BADC) {
     case 1:   mode = INA219_RES_12BIT; break;
@@ -122,7 +132,10 @@ void ina219::SetBADC() {
 void ina219::SetSADC() {
   if (!ina) return;
   while (!Serial.available()) delay(10);
-  SADC = Serial.parseInt();
+  String sadcStr = Serial.readStringUntil('\n');
+  sadcStr.trim();
+  SADC = sadcStr.toInt();
+
   uint8_t mode;
   switch (SADC) {
     case 1:   mode = INA219_RES_12BIT; break;
@@ -165,7 +178,7 @@ void ina219::ReadDecimalValues() {
   shunt_voltage = ina->getShuntVoltage();
 }
 
-void ina219::PrintAll() { //НЕ ЛАБВЬЮШНАЯ, ДЛЯ ЧЕЛОВЕКОВ
+void ina219::PrintAll() {
   if (!ina) { Serial.println(F("Not initialized")); return; }
   Serial.print(F("Address: 0x")); Serial.println(address, HEX);
   Serial.print(F("Bus Voltage: ")); Serial.print(bus_voltage, 5); Serial.println(F(" V"));
@@ -195,8 +208,10 @@ void setup() {
 
 void loop() {
   if (Serial.available()) {
-    String cmd = Serial.readString();
+    // Читаем команду строго до символа \n
+    String cmd = Serial.readStringUntil('\n');
     cmd.trim();
+
     if (cmd == "INIT") {
       test.Initialize();
     } else if (cmd == "PGA") {
@@ -212,8 +227,9 @@ void loop() {
       test.ReadDecimalValues();
       test.PrintAll();
     } else if (cmd == "GETADR") {
-      delay(10);
-      Serial.println(test.address);
+    delay(10);
+    Serial.print("0x");
+    Serial.println(test.address, HEX);
     } else if (cmd == "GETBUS") {
       test.ReadDecimalValues();
       delay(10);
