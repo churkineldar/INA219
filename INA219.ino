@@ -178,28 +178,6 @@ void ina219::ReadDecimalValues() {
   shunt_voltage = ina->getShuntVoltage();
 }
 
-void ina219::PrintAll() {
-  if (!ina) { Serial.println(F("Not initialized")); return; }
-  Serial.print(F("Address: 0x")); Serial.println(address, HEX);
-  Serial.print(F("Bus Voltage: ")); Serial.print(bus_voltage, 5); Serial.println(F(" V"));
-  Serial.print(F("Shunt Voltage: ")); Serial.print(shunt_voltage, 6); Serial.println(F(" V"));
-  Serial.print(F("Current: ")); Serial.print(current, 5); Serial.println(F(" A"));
-  Serial.print(F("Power: ")); Serial.print(power, 3); Serial.println(F(" W"));
-  Serial.print(F("Shunt Resistance: ")); Serial.print(resistance, 6); Serial.println(F(" Ohm"));
-
-  Serial.print(F("PGA Gain: ")); Serial.println(PGA);
-  Serial.print(F("Mode: ")); Serial.println(MODE);
-  Serial.print(F("BADC Averaging: ")); Serial.println(BADC);
-  Serial.print(F("SADC Averaging: ")); Serial.println(SADC);
-
-  Serial.print(F("Config:     ")); Serial.println(ConfigRegister);
-  Serial.print(F("Shunt:      ")); Serial.println(ShuntRegister);
-  Serial.print(F("Bus:        ")); Serial.println(BusRegister);
-  Serial.print(F("Power:      ")); Serial.println(PowerRegister);
-  Serial.print(F("Current:    ")); Serial.println(CurrentRegister);
-  Serial.print(F("Calibration:")); Serial.println(CalibrationRegister);
-}
-
 ina219 test;
 
 void setup() {
@@ -222,68 +200,39 @@ void loop() {
       test.SetSADC();
     } else if (cmd == "MODE") {
       test.SetMode();
-    } else if (cmd == "PRINTALL") {
+    } else if (cmd == "GETALLDATA") {
       test.ReadBinaryRegisters();
       test.ReadDecimalValues();
-      test.PrintAll();
-    } else if (cmd == "GETADR") {
-    delay(10);
-    Serial.print("0x");
-    Serial.println(test.address, HEX);
-    } else if (cmd == "GETBUS") {
-      test.ReadDecimalValues();
       delay(10);
-      Serial.println(test.bus_voltage, 6);
-    } else if (cmd == "GETSHUNT") {
-      test.ReadDecimalValues();
-      delay(10);
-      Serial.println(test.shunt_voltage, 6);
-    } else if (cmd == "GETCURR") {
-      test.ReadDecimalValues();
-      delay(10);
-      Serial.println(test.current, 6);
-    } else if (cmd == "GETPWR") {
-      test.ReadDecimalValues();
-      delay(10);
-      Serial.println(test.power, 6);
-    } else if (cmd == "GETRES") {
-      delay(10);
-      Serial.println(test.resistance, 6);
-    } else if (cmd == "GETPGA") {
-      delay(10);
-      Serial.println(test.PGA);
-    } else if (cmd == "GETBADC") {
-      delay(10);
-      Serial.println(test.BADC);
-    } else if (cmd == "GETSADC") {
-      delay(10);
-      Serial.println(test.SADC);
-    } else if (cmd == "GETMODE") {
-      delay(10);
-      Serial.println(test.MODE);
-    } else if (cmd == "GETCONFREG") {
-      test.ReadBinaryRegisters();
-      delay(10);
-      Serial.println(test.ConfigRegister);
-    } else if (cmd == "GETSHUNTREG") {
-      test.ReadBinaryRegisters();
-      delay(10);
-      Serial.println(test.ShuntRegister);
-    } else if (cmd == "GETBUSREG") {
-      test.ReadBinaryRegisters();
-      delay(10);
-      Serial.println(test.BusRegister);
-    } else if (cmd == "GETPWRREG") {
-      test.ReadBinaryRegisters();
-      delay(10);
-      Serial.println(test.PowerRegister);
-    } else if (cmd == "GETCURREG") {
-      test.ReadBinaryRegisters();
-      delay(10);
-      Serial.println(test.CurrentRegister);
-    } else if (cmd == "GETCALREG") {
-      test.ReadBinaryRegisters();
-      delay(10);
+      Serial.print("0x");
+      Serial.print(test.address, HEX);
+      Serial.print(" ");
+      Serial.print(test.bus_voltage, 6);
+      Serial.print(" ");
+      Serial.print(test.shunt_voltage, 6);
+      Serial.print(" ");
+      Serial.print(test.current, 6);
+      Serial.print(" ");
+      Serial.print(test.power, 6);
+      Serial.print(" ");
+      Serial.print(test.resistance, 6);
+      Serial.print(" ");
+      Serial.print(test.PGA);
+      Serial.print(" ");
+      Serial.print(test.BADC);
+      Serial.print(" ");
+      Serial.print(test.SADC);
+      Serial.print(" ");
+      Serial.print(test.ConfigRegister);
+      Serial.print(" ");
+      Serial.print(test.ShuntRegister);
+      Serial.print(" ");
+      Serial.print(test.BusRegister);
+      Serial.print(" ");
+      Serial.print(test.PowerRegister);
+      Serial.print(" ");
+      Serial.print(test.CurrentRegister);
+      Serial.print(" ");
       Serial.println(test.CalibrationRegister);
     }
   }
